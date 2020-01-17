@@ -84,7 +84,11 @@ class ViewController: UIViewController {
     }
     
     func performBinaryOperation(chain: String){
-        
+        for v in chain {
+            if(["*", "-", "/", "+", "%"].contains(v)){
+                
+            }
+        }
     }
     
     @IBAction func performOperation(_ sender: UIButton) {
@@ -99,13 +103,14 @@ class ViewController: UIViewController {
                 case "AC":
                     resultValue = "0";
                 case "cos":
-                    resultValue = String(cos(Double(resultValue)!));
-                case "sen":
-                    resultValue = String(sin(Double(resultValue)!));
+                    resultValue = String(cos(Double(resultValue)! * Double.pi / 180));
+                case "sin":
+                    resultValue = String(sin(Double(resultValue)! * Double.pi / 180));
                 case "tan":
-                    resultValue = String(tan(Double(resultValue)!));
+                    resultValue = String(tan(Double(resultValue)! * Double.pi / 180));
                 case "log":
-                    resultValue = String(log(Double(resultValue)!));
+                    resultValue = String(logC(val: Double(resultValue)!, forBase: 10.0));
+                    //resultValue = String(log(Double(resultValue)!));
                 case "+/-":
                     if var result = Double(resultValue){
                         result.negate();
@@ -126,6 +131,10 @@ class ViewController: UIViewController {
                     break;
             }
         }
+    }
+    
+    func logC(val: Double, forBase base: Double) -> Double {
+        return log(val)/log(base)
     }
     
     @IBAction func touchDigit(_ sender: UIButton) {
