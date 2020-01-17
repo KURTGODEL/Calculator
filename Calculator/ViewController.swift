@@ -2,19 +2,26 @@
 //  ViewController.swift
 //  Calculator
 //
-//  Created by Student on 2019-11-18.
-//  Copyright © 2019 Student. All rights reserved.
+//  Created by Erick Araujo on 2019-11-18.
+//  Copyright © 2019. All rights reserved.
 //
 
 import UIKit
+import Darwin
 
 class ViewController: UIViewController {
 
     @IBOutlet weak var result1: PaddingLabel!
     
-    @IBOutlet weak var acButton: CustomButton!
-    @IBOutlet weak var delButton: CustomButton!
-    @IBOutlet weak var resultButton: CustomButton!
+    @IBOutlet weak var acButton: CustomButton!;
+    @IBOutlet weak var delButton: CustomButton!;
+    @IBOutlet weak var resultButton: CustomButton!;
+    @IBOutlet weak var barItemFinancial: UITabBarItem!;
+    @IBOutlet weak var barItemScientific: UITabBarItem!;
+    @IBOutlet weak var tabBar: UITabBar!;
+    @IBOutlet weak var financialView: UIView!;
+    @IBOutlet weak var scientificView: UIView!;
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,9 +32,33 @@ class ViewController: UIViewController {
         result1.layer.cornerRadius = 5;
         result1.layer.masksToBounds = true;
         
-        acButton.backgroundColor = UIColor.orange;
-        delButton.backgroundColor = UIColor.red;
-        resultButton.backgroundColor = UIColor.gray;
+        if acButton != nil{
+            acButton.backgroundColor = UIColor.orange;
+            delButton.backgroundColor = UIColor.red;
+            resultButton.backgroundColor = UIColor.gray;
+        }
+        
+        tabBar.selectedItem = tabBar.items?.first;
+        tabBar.delegate = self;
+        
+        scientificView.isHidden = true;
+    }
+    
+    // Show View Controller with new calculator modes
+    func showVC(number: Int){
+        financialView.isHidden = true;
+        scientificView.isHidden = true;
+        
+        switch number {
+            case 0:
+                financialView.isHidden = false;
+                break;
+            case 1:
+                scientificView.isHidden = false;
+                break;
+            default:
+                break;
+        }
     }
     
     var resultValue:String {
@@ -37,7 +68,23 @@ class ViewController: UIViewController {
         
         set{
             result1.text = String(newValue);
+            
+            if(result1.text == ""){
+                result1.text = "0";
+            }
+            
+            let size = result1.text!.count;
+            
+            if(size > 10 && size < 20){
+                result1.font = UIFont(name: result1.font.fontName, size: 32);
+            }else if(size >= 20){
+                result1.font = UIFont(name: result1.font.fontName, size: 25);
+            }
         }
+    }
+    
+    func performBinaryOperation(chain: String){
+        
     }
     
     @IBAction func performOperation(_ sender: UIButton) {
@@ -45,10 +92,36 @@ class ViewController: UIViewController {
             switch (value){
                 case "π":
                     resultValue = String(Double.pi);
+                case "e":
+                    resultValue = String(Darwin.M_E);
                 case "√":
                     resultValue = String(sqrt(Double(resultValue)!));
                 case "AC":
                     resultValue = "0";
+                case "cos":
+                    resultValue = String(cos(Double(resultValue)!));
+                case "sen":
+                    resultValue = String(sin(Double(resultValue)!));
+                case "tan":
+                    resultValue = String(tan(Double(resultValue)!));
+                case "log":
+                    resultValue = String(log(Double(resultValue)!));
+                case "+/-":
+                    if var result = Double(resultValue){
+                        result.negate();
+                        resultValue = String(result);
+                    }
+                case let op where
+                        op == "/" ||
+                        op == "*" ||
+                        op == "+" ||
+                        op == "-" ||
+                        op == "%":
+                    resultValue = resultValue + op;
+                case "🔙":
+                    resultValue = String(resultValue.dropLast());
+                case "=":
+                    performBinaryOperation(chain: resultValue);
                 default:
                     break;
             }
@@ -96,6 +169,7 @@ class ViewController: UIViewController {
     }
 }
 
+// Customize UIButton with new properties like borderColor
 @IBDesignable class CustomButton: UIButton {
     
     var borderWidth: CGFloat = 2.0;
@@ -126,5 +200,17 @@ class ViewController: UIViewController {
         self.layer.cornerRadius = 5.0; //self.frame.size.width / 2.0
         self.layer.borderColor = borderColor;
         self.layer.borderWidth = borderWidth;
+        
+        if(self.backgroundColor == nil){
+            self.backgroundColor = UIColor(displayP3Red: 0.9, green: 0.9, blue: 0.9, alpha: 1.0);
+        }
     }
+}
+
+// Extension for UITabBar trigger Item Selection
+extension ViewController: UITabBarDelegate {
+    func tabBar(_ tabBar: UITabBar, didSelect item: UITabBarItem) {
+        showVC(number: item.tag);
+    }
+    
 }
