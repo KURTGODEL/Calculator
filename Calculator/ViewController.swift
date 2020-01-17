@@ -84,10 +84,32 @@ class ViewController: UIViewController {
     }
     
     func performBinaryOperation(chain: String){
+        var i = 0;
         for v in chain {
             if(["*", "-", "/", "+", "%"].contains(v)){
+                var nChain = chain.replacingOccurrences(of: String(v), with: " ");
+                var numbers: String[] = nChain.split(separator: " ");
+                let left: Double = Double(numbers[0]);
+                let right: Double = Double(numbers[1]);
                 
+                switch v{
+                    case "*":
+                        resultValue = String(left * right);
+                        break;
+                    case "+":
+                        resultValue = String(left + right);
+                        break;
+                    case "-":
+                        resultValue = String(left - right);
+                        break;
+                    case "/":
+                        resultValue = String(left / right);
+                        break;
+                    default:
+                        break;
+                }
             }
+            i = i + 1;
         }
     }
     
