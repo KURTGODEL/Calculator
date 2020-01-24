@@ -22,6 +22,8 @@ class ViewController: UIViewController {
     @IBOutlet weak var financialView: UIView!;
     @IBOutlet weak var scientificView: UIView!;
     
+    var brain: CalculatorBrain = CalculatorBrain();
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -83,61 +85,9 @@ class ViewController: UIViewController {
         }
     }
     
-    func performBinaryOperation(chain: String){
-        var i = 0;
-        for v in chain {
-            if(["*", "-", "/", "+", "%"].contains(v)){
-                var nChain = chain.replacingOccurrences(of: String(v), with: " ");
-                var numbers: String[] = nChain.split(separator: " ");
-                let left: Double = Double(numbers[0]);
-                let right: Double = Double(numbers[1]);
-                
-                switch v{
-                    case "*":
-                        resultValue = String(left * right);
-                        break;
-                    case "+":
-                        resultValue = String(left + right);
-                        break;
-                    case "-":
-                        resultValue = String(left - right);
-                        break;
-                    case "/":
-                        resultValue = String(left / right);
-                        break;
-                    default:
-                        break;
-                }
-            }
-            i = i + 1;
-        }
-    }
-    
     @IBAction func performOperation(_ sender: UIButton) {
         if let value: String = sender.titleLabel?.text{
             switch (value){
-                case "π":
-                    resultValue = String(Double.pi);
-                case "e":
-                    resultValue = String(Darwin.M_E);
-                case "√":
-                    resultValue = String(sqrt(Double(resultValue)!));
-                case "AC":
-                    resultValue = "0";
-                case "cos":
-                    resultValue = String(cos(Double(resultValue)! * Double.pi / 180));
-                case "sin":
-                    resultValue = String(sin(Double(resultValue)! * Double.pi / 180));
-                case "tan":
-                    resultValue = String(tan(Double(resultValue)! * Double.pi / 180));
-                case "log":
-                    resultValue = String(logC(val: Double(resultValue)!, forBase: 10.0));
-                    //resultValue = String(log(Double(resultValue)!));
-                case "+/-":
-                    if var result = Double(resultValue){
-                        result.negate();
-                        resultValue = String(result);
-                    }
                 case let op where
                         op == "/" ||
                         op == "*" ||
@@ -145,19 +95,39 @@ class ViewController: UIViewController {
                         op == "-" ||
                         op == "%":
                     resultValue = resultValue + op;
+                case "()":
+                    for l in String(resultValue.reversed()) {
+                        if(l == "("){
+                            resultValue = resultValue + ")";
+                            break;
+                        }else if(l == ")"){
+                            resultValue = resultValue + "(";
+                            break;
+                        }else{
+                            if(brain.isEmpty(resultValue)){
+                                resultValue = "(";
+                            }else{
+                                if(!resultValue.contains("(") && !resultValue.contains(")")){
+                                    resultValue = resultValue + "(";
+                                }
+                            }
+                        }
+                    }
                 case "🔙":
                     resultValue = String(resultValue.dropLast());
                 case "=":
-                    performBinaryOperation(chain: resultValue);
+                    brain.setDisplay(resultValue);
+                    brain.performOperation(value);
+                    resultValue = brain.result!;
                 default:
+                    brain.setOperand(resultValue);
+                    brain.performOperation(value);
+                    resultValue = brain.result!;
                     break;
             }
         }
     }
     
-    func logC(val: Double, forBase base: Double) -> Double {
-        return log(val)/log(base)
-    }
     
     @IBAction func touchDigit(_ sender: UIButton) {
         if let typed:String = sender.titleLabel?.text {
@@ -168,11 +138,11 @@ class ViewController: UIViewController {
                 return;
             }
             
-            if(value == "0" && typed != "0"){
+            if(brain.isEmpty(value) && typed != "0"){
                 value = typed;
-            }else if(value == "0" && typed == "0"){
+            }else if(brain.isEmpty(value) && typed == "0"){
                 value = "0";
-            }else if(value != "0"){
+            }else if(!brain.isEmpty(value)){
                 value = String(value) + typed;
             }
             
