@@ -11,6 +11,7 @@
 		3F8263882382DC1500ACD053 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F8263872382DC1500ACD053 /* ViewController.swift */; };
 		3F82638B2382DC1500ACD053 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3F8263892382DC1500ACD053 /* Main.storyboard */; };
 		3F8263902382DC1600ACD053 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3F82638E2382DC1600ACD053 /* LaunchScreen.storyboard */; };
+		3FD0473623DB35DA00F7E85D /* CalculatorBrain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD0473523DB35DA00F7E85D /* CalculatorBrain.swift */; };
 		3FFF187723D1FBA100210D5B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3F82638C2382DC1600ACD053 /* Assets.xcassets */; };
 /* End PBXBuildFile section */
 
@@ -22,6 +23,7 @@
 		3F82638C2382DC1600ACD053 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3F82638F2382DC1600ACD053 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		3F8263912382DC1600ACD053 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3FD0473523DB35DA00F7E85D /* CalculatorBrain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculatorBrain.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +60,7 @@
 				3F8263872382DC1500ACD053 /* ViewController.swift */,
 				3F8263892382DC1500ACD053 /* Main.storyboard */,
 				3F8263912382DC1600ACD053 /* Info.plist */,
+				3FD0473523DB35DA00F7E85D /* CalculatorBrain.swift */,
 			);
 			path = Calculator;
 			sourceTree = "<group>";
@@ -143,6 +146,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3FD0473623DB35DA00F7E85D /* CalculatorBrain.swift in Sources */,
 				3F8263882382DC1500ACD053 /* ViewController.swift in Sources */,
 				3F8263862382DC1500ACD053 /* AppDelegate.swift in Sources */,
 			);
